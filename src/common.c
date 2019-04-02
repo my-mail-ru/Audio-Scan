@@ -215,8 +215,22 @@ _file_size(PerlIO *infile)
 
   return file_size;
 #else
-  PerlIO_funcs * const layer = PerlIO_find_layer(aTHX_ STR_WITH_LEN("scalar"), 0);
-  if (layer) {
+  bool scalar_layer = 0;
+  AV* const av = PerlIO_get_layers(aTHX_ infile);
+
+  SSize_t i;
+  const SSize_t last = av_tindex(av);
+  for (i = last; i >= 0; i -= 3) {
+    SV * const * const namsvp = av_fetch(av, i - 2, FALSE);
+    const bool namok = namsvp && *namsvp && SvPOK(*namsvp);
+    if (namok && strcmp(SvPV(*namsvp, PL_na), "scalar") == 0) {
+      scalar_layer = 1;
+      break;
+    }
+  }
+  SvREFCNT_dec(av);
+
+  if (scalar_layer) {
     off_t file_size;
 
     PerlIO_seek(infile, 0, SEEK_END);
