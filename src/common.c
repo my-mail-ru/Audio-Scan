@@ -215,6 +215,17 @@ _file_size(PerlIO *infile)
 
   return file_size;
 #else
+  PerlIO_funcs * const layer = PerlIO_find_layer(aTHX_ STR_WITH_LEN("scalar"), 0);
+  if (layer) {
+    off_t file_size;
+
+    PerlIO_seek(infile, 0, SEEK_END);
+    file_size = PerlIO_tell(infile);
+    PerlIO_seek(infile, 0, SEEK_SET);
+
+    return file_size;
+  }
+
   struct stat buf;
 
   if ( !fstat( PerlIO_fileno(infile), &buf ) ) {
