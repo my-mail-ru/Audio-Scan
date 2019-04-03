@@ -219,7 +219,7 @@ _file_size(PerlIO *infile)
   AV* const av = PerlIO_get_layers(aTHX_ infile);
 
   SSize_t i;
-  const SSize_t last = av_tindex(av);
+  const SSize_t last = av_len(av);
   for (i = last; i >= 0; i -= 3) {
     SV * const * const namsvp = av_fetch(av, i - 2, FALSE);
     const bool namok = namsvp && *namsvp && SvPOK(*namsvp);
