@@ -255,6 +255,10 @@ static short _mp3_get_average_bitrate(mp3info *mp3, uint32_t offset, uint32_t au
     if (wrap_skip) {
       // Skip rest of frame from last buffer
       DEBUG_TRACE("Wrapped, consuming %d bytes from previous frame\n", wrap_skip);
+      if (wrap_skip > buffer_len(mp3->buf)) {
+        DEBUG_TRACE("Wrap size > buffer length. Truncate\n");
+        wrap_skip = buffer_len(mp3->buf);
+      }
       buffer_consume(mp3->buf, wrap_skip);
       wrap_skip = 0;
     }
