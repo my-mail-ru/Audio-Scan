@@ -878,7 +878,6 @@ _mp3_parse(PerlIO *infile, char *file, HV *info)
       my_hv_store( info, "lame_preset", newSVpvf( "ABR %d", mp3->xing_frame->lame_preset ) );
     }
     else if (mp3->xing_frame->lame_preset >= 410 && mp3->xing_frame->lame_preset <= 500) {
-      printf("%d\n",  mp3->xing_frame->lame_preset);
       mp3->xing_frame->lame_preset /= 10;
       mp3->xing_frame->lame_preset -= 41;
       if ( presets_v[mp3->xing_frame->lame_preset] ) {
@@ -886,7 +885,6 @@ _mp3_parse(PerlIO *infile, char *file, HV *info)
       }
     }
     else if (mp3->xing_frame->lame_preset >= 1000 && mp3->xing_frame->lame_preset <= 1007) {
-      printf("%d\n",  mp3->xing_frame->lame_preset);
       mp3->xing_frame->lame_preset -= 1000;
       if ( presets_old[mp3->xing_frame->lame_preset] ) {
         my_hv_store( info, "lame_preset", newSVpv( presets_old[mp3->xing_frame->lame_preset], 0 ) );
