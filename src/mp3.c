@@ -877,7 +877,7 @@ _mp3_parse(PerlIO *infile, char *file, HV *info)
     else if (mp3->xing_frame->lame_preset <= 320) {
       my_hv_store( info, "lame_preset", newSVpvf( "ABR %d", mp3->xing_frame->lame_preset ) );
     }
-    else if (mp3->xing_frame->lame_preset <= 500) {
+    else if (mp3->xing_frame->lame_preset >= 410 && mp3->xing_frame->lame_preset <= 500) {
       mp3->xing_frame->lame_preset /= 10;
       mp3->xing_frame->lame_preset -= 41;
       if ( presets_v[mp3->xing_frame->lame_preset] ) {
